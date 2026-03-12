@@ -1,15 +1,21 @@
 package api;
 
-import models.*;
-import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
+import models.Order;
+import models.OrderClient;
+import models.User;
+import models.UserClient;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.List;
-import static org.hamcrest.CoreMatchers.*;
 
-public class OrderApiTest extends BaseApiTest {    // ← extends BaseApiTest из этого же пакета
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+
+public class OrderApiTest extends BaseApiTest {
     private OrderClient orderClient;
     private UserClient userClient;
     private User user;

@@ -1,13 +1,17 @@
 package api;
 
-import models.*;
-import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
+import models.User;
+import models.UserClient;
+import models.UserCredentials;
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.*;
 
-public class UserApiTest extends BaseApiTest {     // ← extends BaseApiTest из этого же пакета
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+
+public class UserApiTest extends BaseApiTest {
     private UserClient userClient;
     private User user;
 
@@ -90,6 +94,19 @@ public class UserApiTest extends BaseApiTest {     // ← extends BaseApiTest и
         userClient.create(user).statusCode(200);
 
         UserCredentials wrongCredentials = new UserCredentials(user.getEmail(), "wrongpassword");
+
+        userClient.login(wrongCredentials)
+                .statusCode(401)
+                .body("success", is(false))
+                .body("message", equalTo("email or password are incorrect"));
+    }
+
+    @Test
+    @DisplayName("Логин с неверным логином")
+    public void loginWithWrongLoginFail() {
+        userClient.create(user).statusCode(200);
+
+        UserCredentials wrongCredentials = new UserCredentials("wrong_" + user.getEmail(), user.getPassword());
 
         userClient.login(wrongCredentials)
                 .statusCode(401)
