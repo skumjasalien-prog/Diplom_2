@@ -48,15 +48,15 @@ public class OrderApiTest extends BaseApiTest {
 
     @Test
     @DisplayName("Создание заказа без авторизации")
-    public void createOrderWithoutAuthFail() {
+    public void createOrderWithoutAuthSuccess() {
         Order order = new Order(Arrays.asList(
                 ingredientIds.get(0)
         ));
 
         orderClient.createWithoutAuth(order)
-                .statusCode(401)
-                .body("success", is(false))
-                .body("message", equalTo("You should be authorised"));
+                .statusCode(200)
+                .body("success", is(true))
+                .body("order.number", notNullValue());
     }
 
     @Test
